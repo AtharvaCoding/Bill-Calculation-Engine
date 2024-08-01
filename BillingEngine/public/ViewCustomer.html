@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculate Bill Amount</title>
+    <title>View Customer Details</title>
     <!-- Custom CSS -->
     <style>
         body {
@@ -37,31 +37,29 @@
             padding: 20px;
         }
         .form-container {
-            max-width: 700px; /* Increased width */
+            max-width: 500px; /* Adjusted width to ensure it fits well */
             width: 100%;
-            background-image: url("https://th.bing.com/th/id/OIP.kesoDEBuCSzh7lH8swW8_QHaE7?w=259&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"); /* Replace with your image URL */
+            background-image: url("https://th.bing.com/th/id/OIP.kesoDEBuCSzh7lH8swW8_QHaE7?w=259&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"); /* Background image */
             background-size: cover; /* Cover the entire container */
             background-position: center;
             background-repeat: no-repeat;
             border: 1px solid #ddd;
             border-radius: 12px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 40px; /* Increased padding for more space */
+            padding: 30px; /* Adjusted padding */
             text-align: center;
             background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
         }
         .form-container h2 {
             margin-top: 0;
             color: #333;
-            font-size: 28px; /* Increased font size */
+            font-size: 24px; /* Adjusted font size */
             margin-bottom: 20px;
             font-family: 'Arial', sans-serif;
-        }
-        .oj-form-layout {
-            margin-top: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow for better visibility */
         }
         .oj-form-control {
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Reduced margin for better fit */
         }
         .oj-form-control label {
             font-weight: bold;
@@ -69,8 +67,7 @@
             display: block;
             color: #555;
         }
-        input[type="text"],
-        input[type="number"] {
+        input[type="text"] {
             width: 100%;
             padding: 12px;
             margin: 0;
@@ -80,14 +77,6 @@
             font-size: 16px;
             color: #333;
             background-color: #f0f8ff; /* Light pastel blue */
-        }
-        input[type="number"] {
-            -moz-appearance: textfield; /* Firefox */
-        }
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
         }
         button {
             background-color: #004080; /* Medium-dark blue */
@@ -110,42 +99,15 @@
 <body>
     <div class="oj-container">
         <div class="form-container">
-            <h2>Calculate Bill Amount</h2>
-            <form id="bill-form">
-                <div class="oj-form-layout">
-                    <div class="oj-form-control">
-                        <label for="customer-id">Customer ID</label>
-                        <input type="text" id="customer-id" placeholder="Enter Customer ID" required>
-                    </div>
-                    <div class="oj-form-control">
-                        <label for="bill-month">Bill Month</label>
-                        <input type="number" id="bill-month" min="1" max="12" placeholder="Enter Month (1-12)" required>
-                    </div>
-                    <div class="oj-form-control">
-                        <label for="bill-year">Bill Year</label>
-                        <input type="number" id="bill-year" min="1900" max="2100" placeholder="Enter Year (e.g., 2024)" required>
-                    </div>
+            <h2>View Customer Details</h2>
+            <form id="view-customer-form" action="customer-details.html" method="get">
+                <div class="oj-form-control">
+                    <label for="customer-id">Customer ID</label>
+                    <input type="text" id="customer-id" name="customer-id" placeholder="Enter Customer ID" required>
                 </div>
-                <button type="submit" id="submit-button">Submit</button>
+                <button type="submit">Submit</button>
             </form>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle form submission
-            document.getElementById('bill-form').addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the form from submitting the traditional way
-
-                // Extract form values
-                var customerId = document.getElementById('customer-id').value;
-                var billMonth = document.getElementById('bill-month').value;
-                var billYear = document.getElementById('bill-year').value;
-
-                // Example: Display an alert or perform any action with the values
-                alert('Bill calculation submitted!\nCustomer ID: ' + customerId + '\nBill Month: ' + billMonth + '\nBill Year: ' + billYear);
-            });
-        });
-    </script>
 </body>
 </html>

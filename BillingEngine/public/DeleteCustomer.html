@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculate Bill Amount</title>
+    <title>Delete Customer Record</title>
     <!-- Custom CSS -->
     <style>
         body {
@@ -13,7 +13,7 @@
             padding: 0;
         }
         
-        body::before {
+         body::before {
             content: "";
             position: fixed; /* Fixed positioning to stay in place on scroll */
             top: 0;
@@ -37,23 +37,20 @@
             padding: 20px;
         }
         .form-container {
-            max-width: 700px; /* Increased width */
+            max-width: 500px;
             width: 100%;
-            background-image: url("https://th.bing.com/th/id/OIP.kesoDEBuCSzh7lH8swW8_QHaE7?w=259&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"); /* Replace with your image URL */
-            background-size: cover; /* Cover the entire container */
-            background-position: center;
-            background-repeat: no-repeat;
+            background-image: url("https://img.freepik.com/premium-photo/white-piece-paper-that-has-picture-tree-it_421632-16120.jpg?w=740");
             border: 1px solid #ddd;
             border-radius: 12px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 40px; /* Increased padding for more space */
+            padding: 30px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
+            background: linear-gradient(to bottom, #fdfdfd, #fafafa);
         }
         .form-container h2 {
             margin-top: 0;
             color: #333;
-            font-size: 28px; /* Increased font size */
+            font-size: 24px;
             margin-bottom: 20px;
             font-family: 'Arial', sans-serif;
         }
@@ -69,8 +66,7 @@
             display: block;
             color: #555;
         }
-        input[type="text"],
-        input[type="number"] {
+        input[type="text"] {
             width: 100%;
             padding: 12px;
             margin: 0;
@@ -81,16 +77,8 @@
             color: #333;
             background-color: #f0f8ff; /* Light pastel blue */
         }
-        input[type="number"] {
-            -moz-appearance: textfield; /* Firefox */
-        }
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
         button {
-            background-color: #004080; /* Medium-dark blue */
+            background-color: #004080  ; /* Medium-dark blue */
             color: #ffffff;
             border-radius: 6px;
             padding: 12px 20px;
@@ -110,23 +98,15 @@
 <body>
     <div class="oj-container">
         <div class="form-container">
-            <h2>Calculate Bill Amount</h2>
-            <form id="bill-form">
+            <h2>Delete Customer Record</h2>
+            <form id="delete-form">
                 <div class="oj-form-layout">
                     <div class="oj-form-control">
                         <label for="customer-id">Customer ID</label>
                         <input type="text" id="customer-id" placeholder="Enter Customer ID" required>
                     </div>
-                    <div class="oj-form-control">
-                        <label for="bill-month">Bill Month</label>
-                        <input type="number" id="bill-month" min="1" max="12" placeholder="Enter Month (1-12)" required>
-                    </div>
-                    <div class="oj-form-control">
-                        <label for="bill-year">Bill Year</label>
-                        <input type="number" id="bill-year" min="1900" max="2100" placeholder="Enter Year (e.g., 2024)" required>
-                    </div>
                 </div>
-                <button type="submit" id="submit-button">Submit</button>
+                <button type="submit" id="submit-button">Delete Record</button>
             </form>
         </div>
     </div>
@@ -134,16 +114,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Handle form submission
-            document.getElementById('bill-form').addEventListener('submit', function(event) {
+            document.getElementById('delete-form').addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent the form from submitting the traditional way
 
-                // Extract form values
+                // Extract form value
                 var customerId = document.getElementById('customer-id').value;
-                var billMonth = document.getElementById('bill-month').value;
-                var billYear = document.getElementById('bill-year').value;
 
-                // Example: Display an alert or perform any action with the values
-                alert('Bill calculation submitted!\nCustomer ID: ' + customerId + '\nBill Month: ' + billMonth + '\nBill Year: ' + billYear);
+                // Example: Display an alert or perform any action with the value
+                alert('Record deletion successful!\nCustomer ID: ' + customerId);
+                
+                // Here you might send the customerId to a server to process the deletion
             });
         });
     </script>
