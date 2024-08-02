@@ -71,21 +71,7 @@
             display: block;
             color: #555;
         }
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="date"] {
-            width: 100%;
-            padding: 12px;
-            margin: 0;
-            box-sizing: border-box;
-            border: 2px solid #b3cde0;
-            border-radius: 6px;
-            font-size: 16px;
-            color: #333;
-            background-color: #f0f8ff; /* Light pastel blue */
-        }
-        select {
+        input[type="text"] {
             width: 100%;
             padding: 12px;
             margin: 0;
@@ -109,8 +95,7 @@
         button:hover {
             background-color: #002244; /* Slightly darker medium-dark blue */
         }
-        .oj-form-control input::placeholder,
-        .oj-form-control select::placeholder {
+        .oj-form-control input::placeholder {
             color: #bbb;
         }
     </style>
@@ -123,7 +108,7 @@
                 <div class="oj-form-layout">
                     <div class="oj-form-control">
                         <label for="customer-id">Customer ID</label>
-                        <input type="text" id="customer-id" placeholder="Enter Customer ID" required>
+                        <input type="text" id="customer-id" placeholder="Customer ID" required readonly>
                     </div>
                     <div class="oj-form-control">
                         <label for="name">Name</label>
@@ -134,25 +119,8 @@
                         <input type="text" id="address" placeholder="Enter Address" required>
                     </div>
                     <div class="oj-form-control">
-                        <label for="dob">Date of Birth</label>
-                        <input type="date" id="dob" required>
-                    </div>
-                    <div class="oj-form-control">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="Enter Email Address" required>
-                    </div>
-                    <div class="oj-form-control">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" placeholder="Enter Phone Number" required>
-                    </div>
-                    <div class="oj-form-control">
-                        <label for="gender">Gender</label>
-                        <select id="gender" required>
-                            <option value="" disabled selected>Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
+                        <label for="contact">Contact</label>
+                        <input type="text" id="contact" placeholder="Enter Contact Number" required>
                     </div>
                 </div>
                 <button type="submit" id="submit-button">Update</button>
@@ -162,23 +130,78 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('edit-customer-form');
+    
+            // Extract customer ID from query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerId = urlParams.get('customer-id');
+    
+            if (customerId) {
+                // Fetch customer details and populate form
+                fetch(`http://localhost:8080/api/customers/${customerId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data) {
+                            document.getElementById('customer-id').value = data.customerid;
+                            document.getElementById('name').value = data.name;
+                            document.getElementById('address').value = data.address;
+                            document.getElementById('contact').value = data.contact;
+                        } else {
+                            alert('Customer not found!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching customer:', error);
+                        alert('Failed to fetch customer details.');
+                    });
+            } else {
+                alert('Customer ID is missing.');
+            }
+    
             // Handle form submission
-            document.getElementById('edit-customer-form').addEventListener('submit', function(event) {
+            form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Prevent the form from submitting the traditional way
-
-                // Extract form values
-                var customerId = document.getElementById('customer-id').value;
-                var name = document.getElementById('name').value;
-                var address = document.getElementById('address').value;
-                var dob = document.getElementById('dob').value;
-                var email = document.getElementById('email').value;
-                var phone = document.getElementById('phone').value;
-                var gender = document.getElementById('gender').value;
-
-                // Example: Display an alert or perform any action with the values
-                alert('Customer record updated!\nCustomer ID: ' + customerId + '\nName: ' + name + '\nAddress: ' + address + '\nDate of Birth: ' + dob + '\nEmail: ' + email + '\nPhone: ' + phone + '\nGender: ' + gender);
+    
+                const updatedCustomer = {
+                    customerid: document.getElementById('customer-id').value,
+                    name: document.getElementById('name').value,
+                    address: document.getElementById('address').value,
+                    contact: document.getElementById('contact').value
+                };
+    
+                // Send updated customer data to the server
+                fetch(`http://localhost:8080/api/customers/${updatedCustomer.customerid}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedCustomer),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(`HTTP error ${response.status}: ${err.message}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Customer record updated successfully!');
+                    // Optionally, redirect to another page or update the UI
+                })
+                .catch(error => {
+                    console.error('Error updating customer:', error);
+                    alert('Failed to update customer record.');
+                });
             });
         });
     </script>
+    
+    
 </body>
 </html>
