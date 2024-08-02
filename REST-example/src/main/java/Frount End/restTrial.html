@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Users:</h1>
+    <ul></ul>
+    <script type="text/javascript">
+    fetch('http://localhost:8080/api/customers')
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('Network response was not ok ' + res.statusText);
+        }
+        return res.json();
+    })
+    .then(data => {
+        data.forEach(customer => {
+            const markup = `<li>${customer.name}</li>`;
+            document.querySelector('ul').insertAdjacentHTML('beforeend', markup);
+        });
+    })
+    .catch(error => console.log('Error:', error));
+    </script>
+</body>
+</html>
