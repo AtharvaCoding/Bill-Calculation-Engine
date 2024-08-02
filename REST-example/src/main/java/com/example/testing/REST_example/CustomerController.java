@@ -15,13 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
-//@CrossOrigin(origins = "http://localhost:9002")
 public class CustomerController {
 
     @Autowired
     private CustomerRepository customerRepository;
     
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping
     public List<Customer> getAllCustomers() {
     	System.out.println("GET");
@@ -37,7 +35,6 @@ public class CustomerController {
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
     
-
     
 //    working on auto increment: --
 //    @PostMapping
@@ -50,8 +47,6 @@ public class CustomerController {
 //        }
 //    }
     
-
-
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
         return customerRepository.findById(id)
