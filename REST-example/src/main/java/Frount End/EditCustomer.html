@@ -108,7 +108,7 @@
                 <div class="oj-form-layout">
                     <div class="oj-form-control">
                         <label for="customer-id">Customer ID</label>
-                        <input type="text" id="customer-id" placeholder="Customer ID" required>
+                        <input type="text" id="customer-id" placeholder="Customer ID" required readonly>
                     </div>
                     <div class="oj-form-control">
                         <label for="name">Name</label>
@@ -129,77 +129,77 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('edit-customer-form');
+            document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('edit-customer-form');
 
-    // Extract customer ID from query parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const customerId = urlParams.get('customer-id');
+            // Extract customer ID from query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerId = urlParams.get('customer-id');
 
-    if (customerId) {
-        // Fetch customer details and populate form
-        fetch(`http://localhost:8080/api/customers/${customerId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    document.getElementById('customer-id').value = data.customerId; // Ensure this matches your JSON structure
-                    document.getElementById('name').value = data.name;
-                    document.getElementById('address').value = data.address;
-                    document.getElementById('contact').value = data.contact;
-                } else {
-                    alert('Customer not found!');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching customer:', error);
-                alert('Failed to fetch customer details.');
-            });
-    } else {
-        alert('Customer ID is missing.');
-    }
-
-    // Handle form submission
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting the traditional way
-
-        const updatedCustomer = {
-            customerId: document.getElementById('customer-id').value, // Ensure this matches your JSON structure
-            name: document.getElementById('name').value,
-            address: document.getElementById('address').value,
-            contact: document.getElementById('contact').value
-        };
-
-        // Send updated customer data to the server
-        fetch(`http://localhost:8080/api/customers/${updatedCustomer.customerId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedCustomer),
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => {
-                    throw new Error(`HTTP error ${response.status}: ${err.message}`);
-                });
+            if (customerId) {
+                // Fetch customer details and populate form
+                fetch(`http://localhost:8080/api/customers/${customerId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data) {
+                            document.getElementById('customer-id').value = data.customerId; // Ensure this matches your JSON structure
+                            document.getElementById('name').value = data.name;
+                            document.getElementById('address').value = data.address;
+                            document.getElementById('contact').value = data.contact;
+                        } else {
+                            alert('Customer not found!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching customer:', error);
+                        alert('Failed to fetch customer details.');
+                    });
+            } else {
+                alert('Customer ID is missing.');
             }
-            return response.json();
-        })
-        .then(data => {
-            alert('Customer record updated successfully!');
-            // Optionally, redirect to another page or update the UI
-        })
-        .catch(error => {
-            console.error('Error updating customer:', error);
-            alert('Failed to update customer record.');
+
+            // Handle form submission
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                const updatedCustomer = {
+                    customerId: document.getElementById('customer-id').value, // Ensure this matches your JSON structure
+                    name: document.getElementById('name').value,
+                    address: document.getElementById('address').value,
+                    contact: document.getElementById('contact').value
+                };
+
+                // Send updated customer data to the server
+                fetch(`http://localhost:8080/api/customers/${updatedCustomer.customerId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedCustomer),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(`HTTP error ${response.status}: ${err.message}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Customer record updated successfully!');
+                    // Optionally, redirect to another page or update the UI
+                })
+                .catch(error => {
+                    console.error('Error updating customer:', error);
+                    alert('Failed to update customer record.');
+                });
+            });
         });
-    });
-});
 
     </script>
     

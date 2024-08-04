@@ -14,12 +14,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/customers/**").permitAll() // Adjust the paths as needed
+                .requestMatchers("/**").permitAll() // Adjust the paths as needed
                 .anyRequest().authenticated()
             )
             .csrf(csrf -> csrf.disable()); // Disable CSRF for development/testing purposes
 
         return http.build();
     }
+    
+    
 }
 

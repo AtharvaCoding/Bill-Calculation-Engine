@@ -16,15 +16,8 @@ import jakarta.persistence.Table;
 @Table(name="Customer")
 
 public class Customer {
-//	@Id
-////	@GeneratedValue(strategy = GenerationType.IDENTITY) // Use AUTO for MySQL or IDENTITY for Oracle
-//    @Column(name = "CustomerID")
-	
+
 	@Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
-//    @SequenceGenerator(name = "customer_seq", sequenceName = "customer_seq", allocationSize = 1)
-	
-//	fdsafdsa
     @Column(name = "CustomerID")
     private Long customerId;
 
