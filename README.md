@@ -66,24 +66,26 @@ The application provides the following functionalities:
 
 1. **POST /calculate-bill**
    - **Description:** Calculate the total bill amount for a specific customer and billing period.
-   - **Request Body:**
+   - **Transaction Body:**
      ```json
      {
-       "CustomerID": 1,
-       "BillMonth": 7,
-       "BillYear": 2024
-     }
+      "transactionId": 1,
+      "transactionDate": "2024-08-03",
+      "customer":{
+         "customerId": 1,
+         "name": "mohit",
+         "address": "Baner Square, maharashtra.",
+         "contact": "0987654321"
+      },
+      "product":{
+         "productCode": "P001",
+         "productName": "ORMB",
+         "unitPrice": 500.0
+      },
+      "quantity": 10.0
+      }
      ```
-   - **Response:**
-     ```json
-     {
-       "CustomerID": 1,
-       "CustomerName": "John Doe",
-       "BillMonth": 7,
-       "BillYear": 2024,
-       "TotalBillAmount": 250.00
-     }
-     ```
+ 
 
 ## Setup and Installation
 
