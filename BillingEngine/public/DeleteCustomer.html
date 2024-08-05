@@ -106,80 +106,90 @@
     </style>
 </head>
 <body>
- <!-- Navbar -->
- <nav class="navbar">
-    <div class="navbar-logo">
-        <a href="dashboard3.html">BillEase</a>
-    </div>
-    <ul class="navbar-menu">
-        <li><a href="calculate_bill_1.html">Calculate Bill</a></li>
-        <li><a href="ViewCustomer.html">View Customer</a></li>
-        <li><a href="addNewCustomer.html">Add Customer</a></li>
-        <!-- <li><a href="DeleteCustomer.html">Delete Customer</a></li> -->
-        <li><a href="EditCustomer1.html">Update Customer</a></li>
-    </ul>
-</nav>
-    <div class="oj-container">
-        <div class="form-container">
-            <h2>Delete Customer Record</h2>
-            <form id="delete-form">
-                <div class="oj-form-layout">
-                    <div class="oj-form-control">
-                        <label for="customer-id">Customer ID</label>
-                        <input type="text" id="customer-id" placeholder="Enter Customer ID" required>
-                    </div>
-                </div>
-                <button type="submit" id="submit-button">Delete Record</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-       document.addEventListener('DOMContentLoaded', function() {
-    // Handle form submission
-    document.getElementById('delete-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting the traditional way
-
-        // Extract form value
-        var customerId = document.getElementById('customer-id').value;
-
-        // Fetch customer details before deletion
-        fetch(`http://localhost:8080/api/customers/${customerId}`)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Customer not found');
-                }
-            })
-            .then(customer => {
-                // Confirm deletion with customer name
-                if (confirm(`Are you sure you want to delete the customer record for ${customer.name}?`)) {
-                    // Send DELETE request to the server
-                    return fetch(`http://localhost:8080/api/customers/${customerId}`, {
-                        method: 'DELETE'
-                    });
-                } else {
-                    throw new Error('Deletion cancelled by user');
-                }
-            })
-            .then(response => {
-                if (response.ok && response.status === 204) {
-                    alert('Customer record deleted successfully!');
-                    // Optionally, clear the input field or redirect to another page
-                    document.getElementById('customer-id').value = '';
-                } else {
-                    throw new Error('Failed to delete customer');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to delete customer record. Please try again.');
-            });
-    });
-});
-
-
-    </script>
-</body>
-</html>
+    <!-- Navbar -->
+    <nav class="navbar">
+       <div class="navbar-logo">
+           <a href="dashboard3.html">BillEase</a>
+       </div>
+       <ul class="navbar-menu">
+           <li><a href="calculate_bill_1.html">Calculate Bill</a></li>
+           <li><a href="ViewCustomer.html">View Customer</a></li>
+           <li><a href="addNewCustomer.html">Add Customer</a></li>
+           <!-- <li><a href="DeleteCustomer.html">Delete Customer</a></li> -->
+           <li><a href="EditCustomer1.html">Update Customer</a></li>
+       </ul>
+   </nav>
+       <div class="oj-container">
+           <div class="form-container">
+               <h2>Delete Customer Record</h2>
+               <form id="delete-form">
+                   <div class="oj-form-layout">
+                       <div class="oj-form-control">
+                           <label for="customer-id">Customer ID</label>
+                           <input type="number" id="customer-id" placeholder="Enter Customer ID" required>
+                       </div>
+                   </div>
+                   <button type="submit" id="submit-button">Delete Record</button>
+               </form>
+           </div>
+       </div>
+   
+       <script>
+          document.addEventListener('DOMContentLoaded', function() {
+               // Handle form submission
+               document.getElementById('delete-form').addEventListener('submit', function(event) {
+                   event.preventDefault(); // Prevent the form from submitting the traditional way
+   
+                   // Extract form value
+                   var customerId = document.getElementById('customer-id').value;
+   
+                   // Check if customer ID is valid
+                   if (isNaN(customerId) || customerId.trim() === '') {
+                       alert('Please enter a valid Customer ID.');
+                       return;
+                   }
+   
+                   // Fetch customer details before deletion
+                   fetch(`http://localhost:8080/api/customers/${customerId}`)
+                       .then(response => {
+                           if (response.ok) {
+                               return response.json();
+                           } else if (response.status === 404) {
+                               throw new Error('Customer not found');
+                           } else {
+                               throw new Error('Network response was not ok.');
+                           }
+                       })
+                       .then(customer => {
+                           // Confirm deletion with customer name
+                           if (confirm(`Are you sure you want to delete the customer record for ${customer.name}?`)) {
+                               // Send DELETE request to the server
+                               return fetch(`http://localhost:8080/api/customers/${customerId}`, {
+                                   method: 'DELETE'
+                               });
+                           } else {
+                               throw new Error('Deletion cancelled by user');
+                           }
+                       })
+                       .then(response => {
+                           if (response.ok && response.status === 204) {
+                               alert('Customer record deleted successfully!');
+                               // Optionally, clear the input field or redirect to another page
+                               document.getElementById('customer-id').value = '';
+                           } else {
+                               throw new Error('Failed to delete customer');
+                           }
+                       })
+                       .catch(error => {
+                           console.error('Error:', error);
+                           if (error.message === 'Customer not found') {
+                               alert('No customer found with the provided ID.');
+                           } else {
+                               alert('Failed to delete customer record. Please try again.');
+                           }
+                       });
+               });
+           });
+       </script>
+   </body>
+   </html>

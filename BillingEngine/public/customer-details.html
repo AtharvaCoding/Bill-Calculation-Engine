@@ -97,6 +97,23 @@
         button:hover {
             background-color: #002244;
         }
+        /* Styling for customer details */
+        #customer-details {
+            text-align: left;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        #customer-details div {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+        }
+        #customer-details div span {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -116,10 +133,10 @@
         <div class="form-container">
             <h2>Customer Details</h2>
             <div id="customer-details">
-                <div id="customer-id">Customer ID: </div>
-                <div id="customer-name">Name: </div>
-                <div id="customer-address">Address: </div>
-                <div id="customer-contact">Contact: </div>
+                <div id="customer-id"><span>Customer ID:</span></div>
+                <div id="customer-name"><span>Name:</span></div>
+                <div id="customer-address"><span>Address:</span></div>
+                <div id="customer-contact"><span>Contact:</span></div>
             </div>
             <button onclick="window.history.back()">Go Back</button>
         </div>
@@ -147,10 +164,10 @@
                 })
                 .then(data => {
                     // Populate the customer details on the page
-                    document.getElementById('customer-id').textContent = `Customer ID: ${data.customerId}`;
-                    document.getElementById('customer-name').textContent = `Name: ${data.name}`;
-                    document.getElementById('customer-address').textContent = `Address: ${data.address}`;
-                    document.getElementById('customer-contact').textContent = `Contact: ${data.contact}`;
+                    document.getElementById('customer-id').innerHTML = `<span>Customer ID:</span> ${data.customerId}`;
+                    document.getElementById('customer-name').innerHTML = `<span>Name:</span> ${data.name}`;
+                    document.getElementById('customer-address').innerHTML = `<span>Address:</span> ${data.address}`;
+                    document.getElementById('customer-contact').innerHTML = `<span>Contact:</span> ${data.contact}`;
                 })
                 .catch(error => {
                     console.error('Error fetching customer details:', error);

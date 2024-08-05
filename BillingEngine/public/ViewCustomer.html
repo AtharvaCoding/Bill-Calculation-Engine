@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Customer Details</title>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
 
     <style>
         body {
@@ -14,74 +19,59 @@
             margin: 0;
             padding: 0;
         }
-        
-        body::before {
-            content: "";
-            position: fixed; /* Fixed positioning to stay in place on scroll */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("https://www.painters-supply.com/images/RAL/47b9371a5ec847a6416d19e09506ac86_S.jpg");
-            background-size: cover; /* Cover the entire viewport */
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 1; /* Adjust opacity to make it a watermark */
-            z-index: -1; /* Ensure it stays behind other content */
-            pointer-events: none; /* Ensure it does not interfere with interactions */
-        }
-        
+
         .oj-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            flex-direction: column; /* Ensure elements stack vertically */
+            align-items: center; /* Center elements horizontally */
             padding: 20px;
         }
+
         .form-container {
-            max-width: 500px; /* Adjusted width to ensure it fits well */
+            max-width: 600px;
             width: 100%;
-            background-image: url("https://th.bing.com/th/id/OIP.kesoDEBuCSzh7lH8swW8_QHaE7?w=259&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"); /* Background image */
-            background-size: cover; /* Cover the entire container */
-            background-position: center;
-            background-repeat: no-repeat;
+            background: rgba(255, 255, 255, 0.8);
             border: 1px solid #ddd;
             border-radius: 12px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 30px; /* Adjusted padding */
+            padding: 30px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
+            margin-bottom: 20px; /* Add space between containers */
         }
+
         .form-container h2 {
             margin-top: 0;
             color: #333;
-            font-size: 24px; /* Adjusted font size */
+            font-size: 24px;
             margin-bottom: 20px;
             font-family: 'Arial', sans-serif;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow for better visibility */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
+
         .oj-form-control {
-            margin-bottom: 15px; /* Reduced margin for better fit */
+            margin-bottom: 15px;
         }
+
         .oj-form-control label {
             font-weight: bold;
             margin-bottom: 10px;
             display: block;
             color: #555;
         }
-        input[type="text"] {
+
+        .oj-form-control input {
             width: 100%;
             padding: 12px;
-            margin: 0;
             box-sizing: border-box;
             border: 2px solid #b3cde0;
             border-radius: 6px;
             font-size: 16px;
             color: #333;
-            background-color: #f0f8ff; /* Light pastel blue */
+            background-color: #f0f8ff;
         }
+
         button {
-            background-color: #004080; /* Medium-dark blue */
+            background-color: #004080;
             color: #ffffff;
             border-radius: 6px;
             padding: 12px 20px;
@@ -90,16 +80,17 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
-            background-color: #002244; /* Slightly darker medium-dark blue */
+            background-color: #002244;
         }
-        .oj-form-control input::placeholder {
-            color: #bbb;
+
+        .view-all-customers {
+            text-align: center;
         }
+
     </style>
-</head>
-<body>
-    <!-- Navbar -->
+
     <nav class="navbar">
         <div class="navbar-logo">
             <a href="dashboard3.html">BillEase</a>
@@ -123,6 +114,54 @@
                 <button type="submit">Submit</button>
             </form>
         </div>
+
+        <div class="form-container">
+            <div class="view-all-customers">
+                <h2>View All Customers</h2>
+                <button onclick="window.location.href='viewAllCustomers.html'">View All Customers</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('view-customer-form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                // Extract the customer ID from the form
+                const customerId = document.getElementById('customer-id').value;
+
+                // Validate that customer ID is a number and not empty
+                if (isNaN(customerId) || customerId.trim() === '') {
+                    alert('Please enter a valid Customer ID.');
+                    return;
+                }
+
+                // Fetch customer details to check if the customer exists
+                fetch(`http://localhost:8080/api/customers/${customerId}`)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else if (response.status === 404) {
+                            throw new Error('Customer not found');
+                        } else {
+                            throw new Error('An error occurred while fetching customer details');
+                        }
+                    })
+                    .then(customer => {
+                        // Proceed with form submission if customer exists
+                        form.action = `customer-details.html?customer-id=${customerId}`;
+                        form.submit();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('No customer found with the provided ID.');
+                    });
+            });
+        });
+    </script>
 </body>
+
 </html>
