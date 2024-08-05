@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         body::before {
             content: "";
             position: fixed; /* Fixed positioning to stay in place on scroll */
@@ -30,7 +31,7 @@
             z-index: -1; /* Ensure it stays behind other content */
             pointer-events: none; /* Ensure it does not interfere with interactions */
         }
-        
+
         .oj-container {
             display: flex;
             justify-content: center;
@@ -38,6 +39,7 @@
             height: 100vh;
             padding: 20px;
         }
+
         .form-container {
             max-width: 500px; /* Increased width to make it larger */
             width: 100%;
@@ -52,6 +54,7 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
         }
+
         .form-container h2 {
             margin-top: 0;
             color: #333;
@@ -60,15 +63,18 @@
             font-family: 'Arial', sans-serif;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow for better visibility */
         }
+
         .oj-form-control {
             margin-bottom: 15px; /* Reduced margin for better fit */
         }
+
         .oj-form-control label {
             font-weight: bold;
             margin-bottom: 10px;
             display: block;
             color: #555;
         }
+
         input[type="text"] {
             width: 100%;
             padding: 12px;
@@ -80,6 +86,7 @@
             color: #333;
             background-color: #f0f8ff; /* Light pastel blue */
         }
+
         button {
             background-color: #004080; /* Medium-dark blue */
             color: #ffffff;
@@ -90,16 +97,19 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #002244; /* Slightly darker medium-dark blue */
         }
+
         .oj-form-control input::placeholder {
             color: #bbb;
         }
     </style>
 </head>
+
 <body>
-     <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-logo">
             <a href="dashboard3.html">BillEase</a>
@@ -116,14 +126,49 @@
     <div class="oj-container">
         <div class="form-container">
             <h2>Select Customer to Edit</h2>
-            <form id="customer-id-form" action="EditCustomer.html" method="get">
+            <form id="customer-id-form">
                 <div class="oj-form-control">
                     <label for="customer-id">Customer ID</label>
-                    <input type="text" id="customer-id" name="customer-id" placeholder="Enter Customer ID" required>
+                    <input type="number" id="customer-id" name="customer-id" placeholder="Enter Customer ID" required>
                 </div>
                 <button type="submit">Submit</button>
             </form>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('customer-id-form');
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                const customerId = document.getElementById('customer-id').value.trim();
+
+                if (!customerId) {
+                    alert('Please enter a Customer ID.');
+                    return;
+                }
+
+                // Check if the customer ID exists
+                fetch(`http://localhost:8080/api/customers/${customerId}`)
+                    .then(response => {
+                        if (response.status === 404) {
+                            alert('No customer found with the provided ID.');
+                            return;
+                        } else if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        // Redirect to the edit page if the customer exists
+                        window.location.href = `EditCustomer.html?customer-id=${customerId}`;
+                    })
+                    .catch(error => {
+                        console.error('Error checking customer ID:', error);
+                        alert('Failed to check customer ID.');
+                    });
+            });
+        });
+    </script>
 </body>
+
 </html>

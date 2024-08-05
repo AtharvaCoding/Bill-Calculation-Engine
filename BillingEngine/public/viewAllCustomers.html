@@ -7,47 +7,52 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Custom styles for the customer list */
+        /* Container for the customer list */
         .customer-list-container {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 20px auto;
             padding: 20px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%; /* Adjusted width for better responsiveness */
         }
 
+        /* Heading for the customer list */
         .customer-list-container h2 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
             font-size: 28px;
+            font-weight: bold;
         }
 
-        .customer-list-container ul {
-            list-style-type: none;
-            padding: 0;
+        /* Style for the table */
+        .customer-list-container table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .customer-list-container li {
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 6px;
+        .customer-list-container th, .customer-list-container td {
+            padding: 12px;
             border: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: background-color 0.3s;
+            text-align: left;
+            font-size: 16px;
         }
 
-        .customer-list-container li:hover {
+        .customer-list-container th {
+            background-color: #004080;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .customer-list-container tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .customer-list-container tr:hover {
             background-color: #e6f7ff;
         }
-
-        .customer-list-container li span {
-            display: block;
-            color: #555;
-        }
-
     </style>
 </head>
 <body>
@@ -58,9 +63,10 @@
         </div>
         <ul class="navbar-menu">
             <li><a href="calculate_bill_1.html">Calculate Bill</a></li>
+            <li><a href="ViewCustomer.html">View Customer</a></li>
             <li><a href="addNewCustomer.html">Add Customer</a></li>
             <li><a href="DeleteCustomer.html">Delete Customer</a></li>
-            <li><a href="EditCustomer1.html">Update Customer</a></li>
+            <!-- <li><a href="EditCustomer1.html">Update Customer</a></li> -->
         </ul>
     </nav>
 
@@ -68,7 +74,17 @@
     <div class="oj-container">
         <div class="customer-list-container">
             <h2>All Customers</h2>
-            <ul id="customerList"></ul>
+            <table id="customerTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Contact</th>
+                    </tr>
+                </thead>
+                <tbody id="customerList"></tbody>
+            </table>
         </div>
     </div>
 
@@ -85,14 +101,14 @@
                 customerList.innerHTML = '';
 
                 customers.forEach(customer => {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                        <span><strong>ID:</strong> ${customer.customerId}</span>
-                        <span><strong>Name:</strong> ${customer.name}</span>
-                        <span><strong>Address:</strong> ${customer.address}</span>
-                        <span><strong>Contact:</strong> ${customer.contact}</span>
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${customer.customerId}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.address}</td>
+                        <td>${customer.contact}</td>
                     `;
-                    customerList.appendChild(listItem);
+                    customerList.appendChild(row);
                 });
             } catch (error) {
                 console.error('Failed to fetch customers:', error);

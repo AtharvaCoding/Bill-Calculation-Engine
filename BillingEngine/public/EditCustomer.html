@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +39,7 @@
             height: 100vh;
             padding: 20px;
         }
+        
         .form-container {
             max-width: 500px; /* Adjusted width to ensure it fits well */
             width: 100%;
@@ -53,6 +55,7 @@
             background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
             overflow: hidden; /* Ensure no overflow */
         }
+        
         .form-container h2 {
             margin-top: 0;
             color: #333; /* Ensure color contrast for visibility */
@@ -61,18 +64,22 @@
             font-family: 'Arial', sans-serif;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow for better visibility */
         }
+        
         .oj-form-layout {
             margin-top: 10px;
         }
+        
         .oj-form-control {
             margin-bottom: 15px; /* Reduced margin for better fit */
         }
+        
         .oj-form-control label {
             font-weight: bold;
             margin-bottom: 10px;
             display: block;
             color: #555;
         }
+        
         input[type="text"] {
             width: 100%;
             padding: 12px;
@@ -84,6 +91,7 @@
             color: #333;
             background-color: #f0f8ff; /* Light pastel blue */
         }
+        
         button {
             background-color: #004080; /* Medium-dark blue */
             color: #ffffff;
@@ -94,16 +102,19 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+        
         button:hover {
             background-color: #002244; /* Slightly darker medium-dark blue */
         }
+        
         .oj-form-control input::placeholder {
             color: #bbb;
         }
     </style>
 </head>
+
 <body>
-     <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar-logo">
             <a href="dashboard3.html">BillEase</a>
@@ -146,79 +157,106 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('edit-customer-form');
+            const form = document.getElementById('edit-customer-form');
 
-    // Extract customer ID from query parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const customerId = urlParams.get('customer-id');
+            // Extract customer ID from query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerId = urlParams.get('customer-id');
 
-    if (customerId) {
-        // Fetch customer details and populate form
-        fetch(`http://localhost:8080/api/customers/${customerId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    document.getElementById('customer-id').value = data.customerId; // Ensure this matches your JSON structure
-                    document.getElementById('name').value = data.name;
-                    document.getElementById('address').value = data.address;
-                    document.getElementById('contact').value = data.contact;
-                } else {
-                    alert('Customer not found!');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching customer:', error);
-                alert('Failed to fetch customer details.');
-            });
-    } else {
-        alert('Customer ID is missing.');
-    }
-
-    // Handle form submission
-    form.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting the traditional way
-
-        const updatedCustomer = {
-            customerId: document.getElementById('customer-id').value, // Ensure this matches your JSON structure
-            name: document.getElementById('name').value,
-            address: document.getElementById('address').value,
-            contact: document.getElementById('contact').value
-        };
-
-        // Send updated customer data to the server
-        fetch(`http://localhost:8080/api/customers/${updatedCustomer.customerId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedCustomer),
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => {
-                    throw new Error(`HTTP error ${response.status}: ${err.message}`);
-                });
+            if (customerId) {
+                // Fetch customer details and populate form
+                fetch(`http://localhost:8080/api/customers/${customerId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data) {
+                            document.getElementById('customer-id').value = data.customerId; // Ensure this matches your JSON structure
+                            document.getElementById('name').value = data.name;
+                            document.getElementById('address').value = data.address;
+                            document.getElementById('contact').value = data.contact;
+                        } else {
+                            alert('Customer not found!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching customer:', error);
+                        alert('Failed to fetch customer details.');
+                    });
+            } else {
+                alert('Customer ID is missing.');
             }
-            return response.json();
-        })
-        .then(data => {
-            alert('Customer record updated successfully!');
-            // Optionally, redirect to another page or update the UI
-        })
-        .catch(error => {
-            console.error('Error updating customer:', error);
-            alert('Failed to update customer record.');
-        });
-    });
-});
 
+            // Handle form submission
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                // Validate input fields
+                const customerId = document.getElementById('customer-id').value.trim();
+                const name = document.getElementById('name').value.trim();
+                const address = document.getElementById('address').value.trim();
+                const contact = document.getElementById('contact').value.trim();
+
+                const phoneRegex = /^[0-9]{10}$/; // Regex for a 10-digit phone number
+
+                if (!customerId || isNaN(customerId)) {
+                    alert('Please enter a valid Customer ID.');
+                    return;
+                }
+
+                if (!name) {
+                    alert('Name cannot be empty.');
+                    return;
+                }
+
+                if (!address) {
+                    alert('Address cannot be empty.');
+                    return;
+                }
+
+                if (!contact || !phoneRegex.test(contact)) {
+                    alert('Please enter a valid 10-digit contact number.');
+                    return;
+                }
+
+                // Prepare updated customer data
+                const updatedCustomer = {
+                    customerId: customerId,
+                    name: name,
+                    address: address,
+                    contact: contact
+                };
+
+                // Send updated customer data to the server
+                fetch(`http://localhost:8080/api/customers/${updatedCustomer.customerId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedCustomer),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(`HTTP error ${response.status}: ${err.message}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Customer record updated successfully!');
+                    // Optionally, redirect to another page or update the UI
+                })
+                .catch(error => {
+                    console.error('Error updating customer:', error);
+                    alert('Failed to update customer record.');
+                });
+            });
+        });
     </script>
-    
-    
 </body>
+
 </html>
