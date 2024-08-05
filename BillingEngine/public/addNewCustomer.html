@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Customer</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+     <!-- Navbar -->
+     <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="dashboard3.html">BillEase</a>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="calculate_bill_1.html">Calculate Bill</a></li>
+            <li><a href="addNewCustomer.html">Add Customer</a></li>
+            <li><a href="DeleteCustomer.html">Delete Customer</a></li>
+            <li><a href="EditCustomer1.html">Update Customer</a></li>
+        </ul>
+    </nav>
+    <!-- main body -->
+    <div class="oj-container">
+        <div class="form-container">
+            <h2>Add New Customer</h2>
+            <form id="add-customer-form">
+                <div class="oj-form-layout">
+                    <div class="oj-form-control">
+                        <label for="customer-id">Customer ID</label>
+                        <input type="text" id="customer-id" placeholder="Enter Customer ID" required>
+                    </div>
+                    <div class="oj-form-control">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Enter Full Name" required>
+                    </div>
+                    <div class="oj-form-control">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" placeholder="Enter Address" required>
+                    </div>
+                    <div class="oj-form-control">
+                        <label for="contact">Contact</label>
+                        <input type="text" id="contact" placeholder="Enter Phone Number" required>
+                    </div>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('add-customer-form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Extract form values
+                const customer = {
+                    customerId: document.getElementById('customer-id').value,
+                    name: document.getElementById('name').value,
+                    address: document.getElementById('address').value,
+                    contact: document.getElementById('contact').value
+                };
+
+                // Send the data to the server
+                fetch('http://localhost:8080/api/customers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customer),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Customer added successfully!');
+                    // Optionally, you can redirect or update UI as needed
+                    console.log('Response from server:', data);
+                })
+                .catch(error => {
+                    console.error('Error adding customer:', error);
+                    alert('Failed to add customer. Please try again.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

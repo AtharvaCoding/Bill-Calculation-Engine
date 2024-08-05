@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Details</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+            margin: 0;
+            padding: 0;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://www.painters-supply.com/images/RAL/47b9371a5ec847a6416d19e09506ac86_S.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 1;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .oj-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            background-image: url("https://th.bing.com/th/id/OIP.kesoDEBuCSzh7lH8swW8_QHaE7?w=259&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .form-container h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .oj-form-control {
+            margin-bottom: 15px;
+        }
+        .oj-form-control label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            color: #555;
+        }
+        .oj-form-control input,
+        .oj-form-control div {
+            width: 100%;
+            padding: 12px;
+            margin: 0;
+            box-sizing: border-box;
+            border: 2px solid #b3cde0;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f0f8ff;
+        }
+        .oj-form-control div {
+            font-weight: bold;
+        }
+        button {
+            background-color: #004080;
+            color: #ffffff;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #002244;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-logo">
+        <a href="dashboard3.html">BillEase</a>
+    </div>
+    <ul class="navbar-menu">
+        <li><a href="calculate_bill_1.html">Calculate Bill</a></li>
+        <li><a href="addNewCustomer.html">Add Customer</a></li>
+        <li><a href="DeleteCustomer.html">Delete Customer</a></li>
+        <li><a href="EditCustomer1.html">Update Customer</a></li>
+    </ul>
+</nav>
+    <div class="oj-container">
+        <div class="form-container">
+            <h2>Customer Details</h2>
+            <div id="customer-details">
+                <div id="customer-id">Customer ID: </div>
+                <div id="customer-name">Name: </div>
+                <div id="customer-address">Address: </div>
+                <div id="customer-contact">Contact: </div>
+            </div>
+            <button onclick="window.history.back()">Go Back</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the customer ID from the query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerId = urlParams.get('customer-id');
+
+            // If no customer ID is provided, exit early
+            if (!customerId) {
+                alert('No Customer ID provided.');
+                return;
+            }
+
+            // Fetch customer details from the API
+            fetch(`http://localhost:8080/api/customers/${customerId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Populate the customer details on the page
+                    document.getElementById('customer-id').textContent = `Customer ID: ${data.customerId}`;
+                    document.getElementById('customer-name').textContent = `Name: ${data.name}`;
+                    document.getElementById('customer-address').textContent = `Address: ${data.address}`;
+                    document.getElementById('customer-contact').textContent = `Contact: ${data.contact}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching customer details:', error);
+                });
+        });
+    </script>
+</body>
+</html>
