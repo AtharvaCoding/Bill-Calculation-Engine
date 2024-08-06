@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Customer Record</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+            margin: 0;
+            padding: 0;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed; /* Fixed positioning to stay in place on scroll */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://www.painters-supply.com/images/RAL/47b9371a5ec847a6416d19e09506ac86_S.jpg");
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 1; /* Adjust opacity to make it a watermark */
+            z-index: -1; /* Ensure it stays behind other content */
+            pointer-events: none; /* Ensure it does not interfere with interactions */
+        }
+        
+        .oj-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        
+        .form-container {
+            max-width: 500px; /* Adjusted width to ensure it fits well */
+            width: 100%;
+            background-image: url("https://th.bing.com/th/id/OIP.kesoDEBuCSzh7lH8swW8_QHaE7?w=259&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"); /* Background image */
+            background-size: cover; /* Cover the entire container */
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 20px; /* Adjusted padding for a smaller container */
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
+            overflow: hidden; /* Ensure no overflow */
+        }
+        
+        .form-container h2 {
+            margin-top: 0;
+            color: #333; /* Ensure color contrast for visibility */
+            font-size: 24px; /* Adjusted font size */
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Added text shadow for better visibility */
+        }
+        
+        .oj-form-layout {
+            margin-top: 10px;
+        }
+        
+        .oj-form-control {
+            margin-bottom: 15px; /* Reduced margin for better fit */
+        }
+        
+        .oj-form-control label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            color: #555;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 0;
+            box-sizing: border-box;
+            border: 2px solid #b3cde0;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f0f8ff; /* Light pastel blue */
+        }
+        
+        button {
+            background-color: #004080; /* Medium-dark blue */
+            color: #ffffff;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #002244; /* Slightly darker medium-dark blue */
+        }
+        
+        .oj-form-control input::placeholder {
+            color: #bbb;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="dashboard3.html">BillEase</a>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="calculate_bill_1.html">Calculate Bill</a></li>
+            <li><a href="ViewCustomer.html">View Customer</a></li>
+            <li><a href="addNewCustomer.html">Add Customer</a></li>
+            <li><a href="DeleteCustomer.html">Delete Customer</a></li>
+            <!-- <li><a href="EditCustomer1.html">Update Customer</a></li> -->
+        </ul>
+    </nav>
+
+    <div class="oj-container">
+        <div class="form-container">
+            <h2>Edit Customer Record</h2>
+            <form id="edit-customer-form">
+                <div class="oj-form-layout">
+                    <div class="oj-form-control">
+                        <label for="customer-id">Customer ID</label>
+                        <input type="text" id="customer-id" placeholder="Customer ID" required>
+                    </div>
+                    <div class="oj-form-control">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="Enter Full Name" required>
+                    </div>
+                    <div class="oj-form-control">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" placeholder="Enter Address" required>
+                    </div>
+                    <div class="oj-form-control">
+                        <label for="contact">Contact</label>
+                        <input type="text" id="contact" placeholder="Enter Contact Number" required>
+                    </div>
+                </div>
+                <button type="submit" id="submit-button">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('edit-customer-form');
+
+            // Extract customer ID from query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerId = urlParams.get('customer-id');
+
+            if (customerId) {
+                // Fetch customer details and populate form
+                fetch(`http://localhost:8080/api/customers/${customerId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data) {
+                            document.getElementById('customer-id').value = data.customerId; // Ensure this matches your JSON structure
+                            document.getElementById('name').value = data.name;
+                            document.getElementById('address').value = data.address;
+                            document.getElementById('contact').value = data.contact;
+                        } else {
+                            alert('Customer not found!');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching customer:', error);
+                        alert('Failed to fetch customer details.');
+                    });
+            } else {
+                alert('Customer ID is missing.');
+            }
+
+            // Handle form submission
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                // Validate input fields
+                const customerId = document.getElementById('customer-id').value.trim();
+                const name = document.getElementById('name').value.trim();
+                const address = document.getElementById('address').value.trim();
+                const contact = document.getElementById('contact').value.trim();
+
+                const phoneRegex = /^[0-9]{10}$/; // Regex for a 10-digit phone number
+
+                if (!customerId || isNaN(customerId)) {
+                    alert('Please enter a valid Customer ID.');
+                    return;
+                }
+
+                if (!name) {
+                    alert('Name cannot be empty.');
+                    return;
+                }
+
+                if (!address) {
+                    alert('Address cannot be empty.');
+                    return;
+                }
+
+                if (!contact || !phoneRegex.test(contact)) {
+                    alert('Please enter a valid 10-digit contact number.');
+                    return;
+                }
+
+                // Prepare updated customer data
+                const updatedCustomer = {
+                    customerId: customerId,
+                    name: name,
+                    address: address,
+                    contact: contact
+                };
+
+                // Send updated customer data to the server
+                fetch(`http://localhost:8080/api/customers/${updatedCustomer.customerId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedCustomer),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(`HTTP error ${response.status}: ${err.message}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Customer record updated successfully!');
+                    // Optionally, redirect to another page or update the UI
+                })
+                .catch(error => {
+                    console.error('Error updating customer:', error);
+                    alert('Failed to update customer record.');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

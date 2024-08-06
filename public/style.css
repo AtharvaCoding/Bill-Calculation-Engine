@@ -1,0 +1,334 @@
+body {
+    background-color: #f4f7f6; /* Light grayish-blue color */
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif; /* Apply font to the whole page */
+    display: flex;
+    flex-direction: column; /* Allow vertical growth */
+    align-items: center; /* Center horizontally */
+    min-height: 100vh; /* Ensure full viewport height */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+body::before {
+    content: "";
+    position: fixed; /* Fixed positioning to stay in place on scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("https://www.painters-supply.com/images/RAL/47b9371a5ec847a6416d19e09506ac86_S.jpg");
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 1; /* Adjust opacity to make it a watermark */
+    z-index: -1; /* Ensure it stays behind other content */
+    pointer-events: none; /* Ensure it does not interfere with interactions */
+}
+
+.navbar {
+    background-color: #083944; /* Dark blue background for the navbar */
+    padding: 10px 0;
+    position: fixed; /* Fixed position to stick to the top */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Ensure navbar is above other content */
+    display: flex;
+    justify-content: space-between; /* Space out logo and menu */
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-logo a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 24px; /* Font size for the logo */
+    font-weight: bold;
+    padding: 0 20px; /* Space around the logo */
+}
+
+.navbar-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar-menu li {
+    margin: 0 15px; /* Space between items */
+}
+
+.navbar-menu a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    display: block;
+}
+
+.navbar-menu a:hover {
+    background-color: #002244; /* Darker blue on hover */
+    border-radius: 5px;
+}
+
+h1 {
+    color: #ffffff;
+    text-align: center;
+    margin: 60px 0;
+    position: absolute; /* Positioning to be out of the grid */
+    top: 20px; /* Spacing from the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    width: 100%;
+    font-size: 2em; /* Larger font size for the title */
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns layout */
+    grid-template-rows: auto auto; /* Two rows layout */
+    gap: 20px; /* Space between items */
+    padding: 20px; /* Add padding to space out content from edges */
+    box-sizing: border-box; /* Ensure padding is included in element's total width and height */
+    max-width: 1200px;
+    width: 100%;
+    text-align: center; /* Center align text within container */
+    margin-top: 110px; /* Adjust for fixed navbar height */
+}
+
+.options-left, .options-right {
+    display: grid;
+    gap: 20px; /* Space between items */
+}
+
+.options-left {
+    grid-column: 1 / 2; /* Place in the left column */
+}
+
+.options-right {
+    grid-column: 2 / 3; /* Place in the right column */
+}
+
+.option {
+    background-color: rgba(255, 255, 255, 0.4); /* Semi-transparent white background */
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Semi-transparent border */
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.option a {
+    text-decoration: none;
+}
+
+.option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.option h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+    color: #ffffff;
+}
+
+.option p {
+    margin: 10px 0;
+    color: #ffffff;
+}
+
+.centered-option {
+    grid-column: 1 / 3; /* Span across both columns */
+    grid-row: 2 / 3; /* Place in the second row */
+}
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr; /* Single column layout for small screens */
+        grid-template-rows: auto; /* Single row layout */
+    }
+
+    .options-left, .options-right, .centered-option {
+        grid-column: 1; /* Place all items in the single column */
+    }
+}
+
+.oj-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to the top to allow scrolling */
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.form-container {
+    max-width: 700px; /* Increased width */
+    width: 100%;
+    background-image: url("https://th.bing.com/th/id/OIP.kesoDEBuCSzh7lH8swW8_QHaE7?w=259&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"); /* Replace with your image URL */
+    background-size: cover; /* Cover the entire container */
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 30px; /* Increased padding for more space */
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for readability */
+    margin-top: 60px; /* Margin to avoid overlap with navbar */
+}
+
+.form-container h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 28px; /* Increased font size */
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.oj-form-layout {
+    margin-top: 10px;
+}
+
+.oj-form-control {
+    margin-bottom: 20px;
+}
+
+.oj-form-control label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+    color: #555;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    margin: 0;
+    box-sizing: border-box;
+    border: 2px solid #b3cde0;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #333;
+    background-color: #f0f8ff; /* Light pastel blue */
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+button {
+    background-color: #004080; /* Medium-dark blue */
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #002244; /* Slightly darker medium-dark blue */
+}
+
+.oj-form-control input::placeholder {
+    color: #bbb;
+}
+
+.bill-container {
+    max-width: 800px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.bill-container h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background-color: #004080;
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+.total-row {
+    font-weight: bold;
+}
+
+button {
+    background-color: #004080;
+    color: #ffffff;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #002244;
+}
+
+@media print {
+    body {
+        background: none;
+    }
+
+    .oj-container {
+        height: auto;
+        padding: 0;
+    }
+
+    .bill-container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        text-align: left;
+    }
+
+    button {
+        display: none;
+    }
+}

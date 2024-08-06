@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Bill</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Print-specific styles -->
+    <style>
+        @media print {
+            /* Hide everything but the bill container */
+            body * {
+                visibility: hidden;
+            }
+
+            .bill-container, .bill-container * {
+                visibility: visible;
+            }
+
+            .bill-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            /* Add any other styling needed for print */
+            .bill-container table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .bill-container th, .bill-container td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .bill-container th {
+                background-color: #f4f4f4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="dashboard3.html">BillEase</a>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="ViewCustomer.html">View Customer</a></li>
+            <li><a href="addNewCustomer.html">Add Customer</a></li>
+            <li><a href="DeleteCustomer.html">Delete Customer</a></li>
+            <li><a href="EditCustomer1.html">Update Customer</a></li>
+        </ul>
+    </nav>
+    <!-- main body -->
+    <div class="oj-container">
+        <div class="bill-container">
+            <h2>Transaction Bill</h2>
+            <div id="customerDetails">
+                <!-- Placeholder for customer details -->
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Customer ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTableBody">
+                        <!-- Transaction rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <button onclick="printBill()">Print Bill</button>
+            <button onclick="window.history.back()">Go Back</button>
+        </div>
+    </div>
+
+    <script>
+        function printBill() {
+            window.print();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            transactions.sort((a, b) => a.transactionId - b.transactionId); // Sorting by Transaction ID
+
+            const customerDetails = document.getElementById('customerDetails');
+            if (transactions.length > 0) {
+                const customer = transactions[0].customer;
+                customerDetails.innerHTML = `
+                    <p><strong>Customer ID:</strong> ${customer.customerId}</p>
+                    <p><strong>Name:</strong> ${customer.name}</p>
+                    <p><strong>Address:</strong> ${customer.address}</p>
+                    <p><strong>Contact:</strong> ${customer.contact}</p>
+                `;
+            }
+
+            const totalBill = transactions.reduce((total, transaction) => total + (transaction.product.unitPrice * transaction.quantity), 0).toFixed(2);
+
+            const tableBody = document.getElementById('transactionTableBody');
+            tableBody.innerHTML = '';
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                const amount = (transaction.product.unitPrice * transaction.quantity).toFixed(2);
+                row.innerHTML = `
+                    <td>${transaction.transactionId}</td>
+                    <td>${transaction.customer.customerId}</td>
+                    <td>${transaction.transactionDate}</td>
+                    <td>Rs. ${amount}</td>
+                    <td>${transaction.product.productName}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            const totalRow = document.createElement('tr');
+            totalRow.className = 'total-row';
+            totalRow.innerHTML = `
+                <td colspan="3">Total Bill</td>
+                <td>Rs. ${totalBill}</td>
+                <td></td>
+            `;
+            tableBody.appendChild(totalRow);
+        });
+    </script>
+</body>
+</html>

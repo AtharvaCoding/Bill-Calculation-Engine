@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Admin Dashboard</title>
+    <!-- Oracle JET CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/oraclejet@9.1.0/css/alta/oj-alta-min.css" type="text/css">
+    <!-- Custom CSS -->
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+        }
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .option {
+            flex: 0 0 30%;
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+        .option h3 {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bank Admin Dashboard</h1>
+
+        <div class="options-container">
+            <div class="option" data-bind="click: showAddCustomerForm">
+                <h3>Add New Customer</h3>
+                <p>Click here to add a new customer</p>
+            </div>
+            <div class="option" data-bind="click: showEditCustomerForm">
+                <h3>Edit Existing Customer</h3>
+                <p>Click here to edit customer details</p>
+            </div>
+            <div class="option" data-bind="click: showCalculateBillForm">
+                <h3>Calculate Bill Amount</h3>
+                <p>Click here to calculate customer's bill amount</p>
+            </div>
+            <div class="option" data-bind="click: showViewCustomerForm">
+                <h3>View Customer Details</h3>
+                <p>Click here to view customer details</p>
+            </div>
+            <div class="option" data-bind="click: generateReports">
+                <h3>Generate Reports</h3>
+                <p>Click here to generate reports</p>
+            </div>
+        </div>
+
+        <!-- Add New Customer Form -->
+        <div id="addCustomerForm" class="form-group" data-bind="visible: isAddCustomerFormVisible">
+            <h2>Add New Customer</h2>
+            <div class="form-group">
+                <label for="newCustomerName">Name:</label>
+                <input id="newCustomerName" type="text" data-bind="value: newCustomerName" placeholder="Customer Name">
+            </div>
+            <div class="form-group">
+                <label for="newCustomerAddress">Address:</label>
+                <input id="newCustomerAddress" type="text" data-bind="value: newCustomerAddress" placeholder="Customer Address">
+            </div>
+            <div class="form-group">
+                <label for="newCustomerContact">Contact:</label>
+                <input id="newCustomerContact" type="text" data-bind="value: newCustomerContact" placeholder="Customer Contact">
+            </div>
+            <button data-bind="click: addCustomer">Add Customer</button>
+        </div>
+
+        <!-- Other forms... -->
+
+    </div>
+
+    <!-- Oracle JET and Knockout JS dependencies -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/knockout@3.5.1/build/output/knockout-latest.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/oraclejet@9.1.0/lib/js/oj-alta.js"></script>
+    <script type="text/javascript">
+        // ViewModel for Bank Admin Dashboard
+        function BankAdminViewModel() {
+            var self = this;
+
+            // Observables
+            self.isAddCustomerFormVisible = ko.observable(false);
+            self.isEditCustomerFormVisible = ko.observable(false);
+            self.isCalculateBillFormVisible = ko.observable(false);
+            self.isViewCustomerFormVisible = ko.observable(false);
+            self.newCustomerName = ko.observable('');
+            self.newCustomerAddress = ko.observable('');
+            self.newCustomerContact = ko.observable('');
+            self.editCustomerId = ko.observable('');
+            self.editCustomerName = ko.observable('');
+            self.editCustomerAddress = ko.observable('');
+            self.editCustomerContact = ko.observable('');
+            self.billCustomerId = ko.observable('');
+            self.billMonth = ko.observable('');
+            self.billYear = ko.observable('');
+            self.billAmount = ko.observable('');
+            self.viewCustomerId = ko.observable('');
+            self.customerDetails = ko.observable({});
+
+            // Functions to switch forms
+            self.showAddCustomerForm = function() {
+                self.isAddCustomerFormVisible(true);
+                self.isEditCustomerFormVisible(false);
+                self.isCalculateBillFormVisible(false);
+                self.isViewCustomerFormVisible(false);
+            };
+
+            self.showEditCustomerForm = function() {
+                self.isAddCustomerFormVisible(false);
+                self.isEditCustomerFormVisible(true);
+                self.isCalculateBillFormVisible(false);
+                self.isViewCustomerFormVisible(false);
+            };
+
+            self.showCalculateBillForm = function() {
+                self.isAddCustomerFormVisible(false);
+                self.isEditCustomerFormVisible(false);
+                self.isCalculateBillFormVisible(true);
+                self.isViewCustomerFormVisible(false);
+            };
+
+            self.showViewCustomerForm = function() {
+                self.isAddCustomerFormVisible(false);
+                self.isEditCustomerFormVisible(false);
+                self.isCalculateBillFormVisible(false);
+                self.isViewCustomerFormVisible(true);
+            };
+
+            // Add New Customer
+            self.addCustomer = function() {
+                var customerData = {
+                    name: self.newCustomerName(),
+                    address: self.newCustomerAddress(),
+                    contact: self.newCustomerContact()
+                };
+
+                fetch('/api/customers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(customerData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Customer added:', data);
+                    // Optionally clear form fields or provide feedback
+                })
+                .catch(error => console.error('Error:', error));
+            };
+
+            // Additional functions for other forms...
+        }
+
+        // Apply Knockout bindings
+        var viewModel = new BankAdminViewModel();
+        ko.applyBindings(viewModel);
+    </script>
+</body>
+</html>

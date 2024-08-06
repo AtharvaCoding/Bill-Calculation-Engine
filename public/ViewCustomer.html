@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Customer Details</title>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f5f5f5, #e0e0e0);
+            margin: 0;
+            padding: 0;
+        }
+
+        .oj-container {
+            display: flex;
+            flex-direction: column; /* Ensure elements stack vertically */
+            align-items: center; /* Center elements horizontally */
+            padding: 20px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px; /* Add space between containers */
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .oj-form-control {
+            margin-bottom: 15px;
+        }
+
+        .oj-form-control label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            color: #555;
+        }
+
+        .oj-form-control input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 2px solid #b3cde0;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #333;
+            background-color: #f0f8ff;
+        }
+
+        button {
+            background-color: #004080;
+            color: #ffffff;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #002244;
+        }
+
+        .view-all-customers {
+            text-align: center;
+        }
+
+    </style>
+
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="dashboard3.html">BillEase</a>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="calculate_bill_1.html">Calculate Bill</a></li>
+            <li><a href="addNewCustomer.html">Add Customer</a></li>
+            <li><a href="DeleteCustomer.html">Delete Customer</a></li>
+            <li><a href="EditCustomer1.html">Update Customer</a></li>
+        </ul>
+    </nav>
+    <!-- main body -->
+    <div class="oj-container">
+        <div class="form-container">
+            <h2>View Customer Details</h2>
+            <form id="view-customer-form" action="customer-details.html" method="get">
+                <div class="oj-form-control">
+                    <label for="customer-id">Customer ID</label>
+                    <input type="text" id="customer-id" name="customer-id" placeholder="Enter Customer ID" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="form-container">
+            <div class="view-all-customers">
+                <h2>View All Customers</h2>
+                <button onclick="window.location.href='viewAllCustomers.html'">View All Customers</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('view-customer-form');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                // Extract the customer ID from the form
+                const customerId = document.getElementById('customer-id').value;
+
+                // Validate that customer ID is a number and not empty
+                if (isNaN(customerId) || customerId.trim() === '') {
+                    alert('Please enter a valid Customer ID.');
+                    return;
+                }
+
+                // Fetch customer details to check if the customer exists
+                fetch(`http://localhost:8080/api/customers/${customerId}`)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else if (response.status === 404) {
+                            throw new Error('Customer not found');
+                        } else {
+                            throw new Error('An error occurred while fetching customer details');
+                        }
+                    })
+                    .then(customer => {
+                        // Proceed with form submission if customer exists
+                        form.action = `customer-details.html?customer-id=${customerId}`;
+                        form.submit();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('No customer found with the provided ID.');
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>

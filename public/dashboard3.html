@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Admin Dashboard</title>
+    <!-- Oracle JET CSS -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/oraclejet@9.1.0/css/alta/oj-alta-min.css" type="text/css"> -->
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+ <!-- Navbar -->
+ <nav class="navbar">
+    <div class="navbar-logo">
+        <a href="dashboard3.html">BillEase</a>
+    </div>
+    <ul class="navbar-menu">
+        <!-- <li><a href="calculate_bill_1.html">Calculate Bill</a></li> -->
+        <li><a href="ViewCustomer.html">View Customer</a></li>
+        <li><a href="addNewCustomer.html">Add Customer</a></li>
+        <li><a href="DeleteCustomer.html">Delete Customer</a></li>
+        <li><a href="EditCustomer1.html">Update Customer</a></li>
+    </ul>
+</nav>
+
+<h1>Bank Admin Dashboard</h1>
+<div class="container">
+        <div class="options-left">
+            <div class="option">
+                <a href="addNewCustomer.html" >
+                    <h3>Add New Customer</h3>
+                    <p>Click here to add a new customer</p>
+                </a>
+            </div>
+            <div class="option">
+                <a href="EditCustomer1.html" >
+                    <h3>Update Existing Customer</h3>
+                    <p>Click here to update customer details</p>
+                </a>
+            </div>
+        </div>
+        <div class="options-right">
+            <div class="option">
+                <a href="ViewCustomer.html" >
+                    <h3>View Customer Details</h3>
+                    <p>Click here to view customer details</p>
+                </a>
+            </div>
+            <div class="option">
+                <a href="DeleteCustomer.html" >
+                    <h3>Delete Customer Record</h3>
+                    <p>Click here to delete customer record</p>
+                </a>
+            </div>
+        </div>
+        <div class="centered-option">
+            <div class="option">
+                <a href="Calculate_bill_1.html" >
+                    <h3>Calculate Bill Amount</h3>
+                    <p>Click here to calculate customer's bill amount</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Placeholder for dynamic content -->
+    <div id="content-placeholder"></div>
+
+    <!-- Oracle JET and Knockout JS dependencies -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/knockout@3.5.1/build/output/knockout-latest.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/oraclejet@9.1.0/lib/js/oj-alta.js"></script>
+    <script type="text/javascript">
+        function BankAdminViewModel() {
+            var self = this;
+            self.currentTemplate = ko.observable(''); // To hold current template name
+
+            self.showTemplate = function(templateName) {
+                self.currentTemplate(templateName);
+                // You might want to use AJAX to load template content dynamically here.
+                document.getElementById('content-placeholder').innerHTML = `Loaded content for ${templateName}`;
+            };
+        }
+
+        var viewModel = new BankAdminViewModel();
+        ko.applyBindings(viewModel);
+
+        function navigateTo(templateName) {
+            viewModel.showTemplate(templateName);
+        }
+    </script>
+</body>
+</html>
