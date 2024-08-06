@@ -332,3 +332,50 @@ button:hover {
         display: none;
     }
 }
+/* Container for the customer list */
+.customer-list-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Adjusted width for better responsiveness */
+    
+}
+
+/* Heading for the customer list */
+.customer-list-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Style for the table */
+.customer-list-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.customer-list-container th, .customer-list-container td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 16px;
+}
+
+.customer-list-container th {
+    background-color: #004080;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.customer-list-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.customer-list-container tr:hover {
+    background-color: #e6f7ff;
+}
