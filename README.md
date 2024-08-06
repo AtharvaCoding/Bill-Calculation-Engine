@@ -28,11 +28,11 @@ The application provides the following functionalities:
 
 - **Frontend:**
   - HTML5
-  - Knockout JS
-  - Oracle JET
+  - css
+  - JavaScript
 
 - **Database:**
-  - MySQL (or Oracle SQL depending on actual database setup)
+  - Oracle Sql Database.
 
 ## Database Schema
 
