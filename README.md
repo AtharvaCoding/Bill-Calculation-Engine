@@ -64,7 +64,7 @@ The application provides the following functionalities:
 
 ## API Endpoints
 
-1. **POST /calculate-bill**
+1. **GET /api/transactions**
    - **Description:** Calculate the total bill amount for a specific customer and billing period.
    - **Transaction Body:**
      ```json
@@ -84,6 +84,32 @@ The application provides the following functionalities:
       },
       "quantity": 10.0
       }
+     ```
+
+2. **POST /api/products**
+   - **Description:** Post the product in the Product table.
+   - **Product Body:**
+     ```json
+     {
+      "productCode": "P001",
+      "productName": "ORMB",
+      "unitPrice": 500.0
+     }
+     ```
+3. **POST /api/transactions**
+   - **Description:** Post the transaction in the Transaction table.
+   - **Transaction Body:**
+     ```json
+     {
+       "transactionDate": "2024-01-26",
+       "customer": {
+           "customerId": 13
+       },
+       "product": {
+           "productCode": "P003"
+       },
+       "quantity": 10
+     }
      ```
  
 
